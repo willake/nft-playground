@@ -1,0 +1,21 @@
+.button {
+    text-align: center;
+    width: 120px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+    color: seashell;
+    border: medium solid whitesmoke;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: medium;
+    cursor: pointer;
+    box-shadow: 0 9px #999;
+}
+  
+.button:hover { background-color: rgba(255, 255, 255, 0.2) }
+  
+.button:active {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
