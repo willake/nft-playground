@@ -1,6 +1,16 @@
 import * as p5 from "p5";
-import eye from './images/eye.png';
-import mouth from './images/mouth.png';
+
+function importAll(req: __WebpackModuleApi.RequireContext) {
+    let images : any[] = [];
+    
+    req.keys().forEach((item, index) => { 
+        images.push(req(item)); 
+    });
+    
+    return images;
+}
+const eyes = importAll(require.context('./images/eye', false, /\.(png)$/));
+const mouths = importAll(require.context('./images/mouth', false, /\.(png)$/));
 
 interface Position {
     x: number,
@@ -60,13 +70,14 @@ const RandomFaceSketch = function(sketch: p5) {
 
     sketch.setup = function setup() {
         sketch.createCanvas(width, height);
-        eyeImage = this.loadImage(eye);
-        mouthImage = this.loadImage(mouth);
+        eyeImage = this.loadImage(eyes[0].default);
+        mouthImage = this.loadImage(mouths[1].default);
 
         positions = shuffleArray(positions);
     };
 
     sketch.draw = function draw() {
+        // return;
         this.image(
             eyeImage, 
             positions[0].x + offsetEye.xOffset, 
@@ -81,8 +92,8 @@ const RandomFaceSketch = function(sketch: p5) {
         
         this.image(
             mouthImage, 
-            positions[3].x + offsetMouth.xOffset, 
-            positions[3].y + offsetMouth.yOffset, 
+            positions[2].x + offsetMouth.xOffset, 
+            positions[2].y + offsetMouth.yOffset, 
             mouthSize.width, mouthSize.height);
     };
 } 
