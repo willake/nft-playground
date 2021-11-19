@@ -1,6 +1,5 @@
 import * as p5 from "p5";
 import eye from './images/eye.png';
-import nose from './images/nose.png';
 import mouth from './images/mouth.png';
 
 interface Position {
@@ -16,7 +15,6 @@ interface Size {
 interface FacePosition {
     leftEye: Position,
     rightEye: Position,
-    nose: Position,
     mouth: Position
 }
 
@@ -44,31 +42,25 @@ const RandomFaceSketch = function(sketch: p5) {
     let eyeImage: p5.Image;
     let eyeSize : Size = { width: 100, height: 60 };
 
-    let noseImage: p5.Image;
-    let noseSize : Size = { width: 76, height: 100 };
-
     let mouthImage: p5.Image;
     let mouthSize : Size = { width: 130, height: 82 };
 
     let facePostion : FacePosition = {
         leftEye: { x: (width / 2) - 100, y: 100},
         rightEye: { x: (width / 2) + 100, y: 100},
-        nose: { x: (width / 2), y: 250 },
         mouth: { x: (width / 2), y: 380 }
     };
 
-    let positions = [facePostion.leftEye, facePostion.rightEye, facePostion.nose, facePostion.mouth]
+    let positions = [facePostion.leftEye, facePostion.rightEye, facePostion.mouth]
         .map(pos => randomPosition(pos, 30));
     
 
     let offsetEye = offsetCenter(eyeSize);
-    let offsetNose = offsetCenter(noseSize);
     let offsetMouth = offsetCenter(mouthSize);
 
     sketch.setup = function setup() {
         sketch.createCanvas(width, height);
         eyeImage = this.loadImage(eye);
-        noseImage = this.loadImage(nose);
         mouthImage = this.loadImage(mouth);
 
         positions = shuffleArray(positions);
@@ -86,12 +78,6 @@ const RandomFaceSketch = function(sketch: p5) {
             positions[1].x + offsetEye.xOffset, 
             positions[1].y + offsetEye.yOffset, 
             eyeSize.width, eyeSize.height);
-        
-        this.image(
-            noseImage, 
-            positions[2].x + offsetNose.xOffset, 
-            positions[2].y + offsetNose.yOffset, 
-            noseSize.width, noseSize.height);
         
         this.image(
             mouthImage, 
