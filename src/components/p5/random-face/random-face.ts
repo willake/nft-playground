@@ -1,103 +1,81 @@
 import * as p5 from "p5";
-import eye from './images/eye.png';
-import nose from './images/nose.png';
-import mouth from './images/mouth.png';
+import { Vector, Size } from "../../../utils/3d";
+import { Face } from "./faces/face";
+import { Face1 } from "./faces/face-1";
+import { Face2 } from "./faces/face-2";
 
-interface Position {
-    x: number,
-    y: number
+function importAll(req: __WebpackModuleApi.RequireContext) {
+    let images : any[] = [];
+    
+    req.keys().forEach((item, index) => { 
+        images.push(req(item)); 
+    });
+    
+    return images;
 }
 
-interface Size {
-    width: number,
-    height: number
-}
+const backgroundColors : Vector[] = [
+    [84, 113, 158, 0],
+    [246, 208, 206, 0],
+    [178, 156, 122, 0],
+    [252, 199, 135, 0],
+    [112, 193, 170, 0],
+    [138, 161, 177, 0],
+    [224, 213, 151, 0],
+    [114, 160, 135, 0],
+    [153, 204, 220, 0]
+];
 
-interface FacePosition {
-    leftEye: Position,
-    rightEye: Position,
-    nose: Position,
-    mouth: Position
-}
-
-function shuffleArray(array: any[]) {
-    return array
-        .map((value) => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value);
-}
-
-function offsetCenter(size: Size) {
-    return { xOffset: -size.width / 2, yOffset: -size.height / 2 };
-}
-
-function randomPosition(position: Position, range: number) {
-    let xRandom = (Math.random() * range * 2) - range;
-    let yRandom = (Math.random() * range * 2) - range;
-    return { x: position.x + xRandom, y: position.y + yRandom } as Position;
-}
+const eyes = importAll(require.context('./images/eyes', false, /\.(png)$/));
+const mouths = importAll(require.context('./images/mouth', false, /\.(png)$/));
+const CANVAS_SIZE: Size = { width: 1200, height: 1200 };
+const IMAGE_SIZE: Size = { width: 800, height: 800 };
 
 const RandomFaceSketch = function(sketch: p5) {
-    let width = 600;
-    let height = 600;
+    let background: Vector;
 
-    let eyeImage: p5.Image;
-    let eyeSize : Size = { width: 100, height: 60 };
-
-    let noseImage: p5.Image;
-    let noseSize : Size = { width: 76, height: 100 };
+    let leftEyeImage: p5.Image;
+    let rightEyeImage: p5.Image;
 
     let mouthImage: p5.Image;
-    let mouthSize : Size = { width: 130, height: 82 };
 
-    let facePostion : FacePosition = {
-        leftEye: { x: (width / 2) - 100, y: 100},
-        rightEye: { x: (width / 2) + 100, y: 100},
-        nose: { x: (width / 2), y: 250 },
-        mouth: { x: (width / 2), y: 380 }
-    };
+    let face: Face;
 
-    let positions = [facePostion.leftEye, facePostion.rightEye, facePostion.nose, facePostion.mouth]
-        .map(pos => randomPosition(pos, 30));
-    
-
-    let offsetEye = offsetCenter(eyeSize);
-    let offsetNose = offsetCenter(noseSize);
-    let offsetMouth = offsetCenter(mouthSize);
+    sketch.preload = function preload() {
+        leftEyeImage = this.loadImage(eyes[Math.floor(Math.random() * eyes.length)].default);
+        rightEyeImage = this.loadImage(eyes[Math.floor(Math.random() * eyes.length)].default);
+        mouthImage = this.loadImage(mouths[Math.floor(Math.random() * mouths.length)].default);
+    }
 
     sketch.setup = function setup() {
-        sketch.createCanvas(width, height);
-        eyeImage = this.loadImage(eye);
-        noseImage = this.loadImage(nose);
-        mouthImage = this.loadImage(mouth);
+        sketch.createCanvas(CANVAS_SIZE.width, CANVAS_SIZE.height);
 
-        positions = shuffleArray(positions);
+        let random = Math.round(Math.random());
+        
+        switch(random) {
+            case 0: face = new Face1(this); break;
+            case 1: face = new Face2(this); break;
+            default: face = new Face1(this); break;
+        }
+
+        background = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
     };
 
     sketch.draw = function draw() {
-        this.image(
-            eyeImage, 
-            positions[0].x + offsetEye.xOffset, 
-            positions[0].y + offsetEye.yOffset, 
-            eyeSize.width, eyeSize.height);
+        if(face == null) {
+            return;
+        }
 
-        this.image(
-            eyeImage, 
-            positions[1].x + offsetEye.xOffset, 
-            positions[1].y + offsetEye.yOffset, 
-            eyeSize.width, eyeSize.height);
-        
-        this.image(
-            noseImage, 
-            positions[2].x + offsetNose.xOffset, 
-            positions[2].y + offsetNose.yOffset, 
-            noseSize.width, noseSize.height);
-        
-        this.image(
-            mouthImage, 
-            positions[3].x + offsetMouth.xOffset, 
-            positions[3].y + offsetMouth.yOffset, 
-            mouthSize.width, mouthSize.height);
+        this.background(background[0], background[1], background[2]);
+        this.imageMode(this.CENTER);
+
+        face.drawLeftEye(leftEyeImage, IMAGE_SIZE);
+        face.drawRightEye(rightEyeImage, IMAGE_SIZE);
+        face.drawMouth(mouthImage, IMAGE_SIZE);
+
+        // face.drawLeftEyeRange(IMAGE_SIZE);
+        // face.drawRightEyeRange(IMAGE_SIZE);
+        // face.drawMouthRange(IMAGE_SIZE);
     };
 } 
 
