@@ -41,11 +41,14 @@ const RandomFaceSketch = function(sketch: p5) {
 
     let face: Face;
 
-    sketch.setup = function setup() {
-        sketch.createCanvas(CANVAS_SIZE.width, CANVAS_SIZE.height);
+    sketch.preload = function preload() {
         leftEyeImage = this.loadImage(eyes[Math.floor(Math.random() * eyes.length)].default);
         rightEyeImage = this.loadImage(eyes[Math.floor(Math.random() * eyes.length)].default);
         mouthImage = this.loadImage(mouths[Math.floor(Math.random() * mouths.length)].default);
+    }
+
+    sketch.setup = function setup() {
+        sketch.createCanvas(CANVAS_SIZE.width, CANVAS_SIZE.height);
 
         let random = Math.round(Math.random());
         
@@ -62,7 +65,7 @@ const RandomFaceSketch = function(sketch: p5) {
         if(face == null) {
             return;
         }
-        
+
         this.background(background[0], background[1], background[2]);
         this.imageMode(this.CENTER);
 
@@ -70,9 +73,9 @@ const RandomFaceSketch = function(sketch: p5) {
         face.drawRightEye(rightEyeImage, IMAGE_SIZE);
         face.drawMouth(mouthImage, IMAGE_SIZE);
 
-        face.drawLeftEyeRange(IMAGE_SIZE);
-        face.drawRightEyeRange(IMAGE_SIZE);
-        face.drawMouthRange(IMAGE_SIZE);
+        // face.drawLeftEyeRange(IMAGE_SIZE);
+        // face.drawRightEyeRange(IMAGE_SIZE);
+        // face.drawMouthRange(IMAGE_SIZE);
     };
 } 
 
