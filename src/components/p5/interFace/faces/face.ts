@@ -1,9 +1,9 @@
-import * as p5 from "p5";
-import { Vector, Size } from '../../../../utils/3d';
+import * as P5 from "p5";
+import { Vector, Size } from '../../../../utils/math';
 
 export abstract class Face {
-    protected canvas: p5;
     public positions: Vector[];
+
     static debugStorkeColors = [
         [170, 57, 57],
         [170, 132, 57],
@@ -15,16 +15,13 @@ export abstract class Face {
         [212, 209, 106]
     ];
 
-    constructor(canvas: p5) {
+    constructor() {
         this.positions = [];
-        this.canvas = canvas;
     }
 
-    public abstract drawLeftEye(image: p5.Image, size: Size): void;
-    public abstract drawRightEye(image: p5.Image, size: Size): void;
-    public abstract drawMouth(image: p5.Image, size: Size): void;
+    public abstract drawEyes(p5: P5, size: Size): void;
+    public abstract drawMouth(p5: P5, size: Size): void;
 
-    public abstract drawLeftEyeRange(size: Size): void;
-    public abstract drawRightEyeRange(size: Size): void;
-    public abstract drawMouthRange(size: Size): void;
+    public abstract drawEyesRange(p5: P5, size: Size): void;
+    public abstract drawMouthRange(p5: P5, size: Size): void;
 }

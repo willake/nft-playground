@@ -16,7 +16,6 @@ export default class P5Wrapper extends React.Component<IProps, {}> {
   }
 
   public componentDidUpdate(newprops: IProps) {
-      console.log("update");
       this.setSketch(newprops);
   }
 

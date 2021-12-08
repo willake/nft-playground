@@ -1,8 +1,12 @@
-import * as p5 from "p5";
-import { Vector, Size } from "../../../../utils/3d";
+import * as P5 from "p5";
+import { Vector, Size } from "../../../../utils/math";
 import { Face } from "./face";
 
 export class Face1 extends Face {
+    leftEye: P5.Image;
+    rightEye: P5.Image;
+    mouth: P5.Image;
+
     // range from 0 to 1, it will multiply canvas size 
     leftEyeRange = 0.7;
     rightEyeRange = 0.7;
@@ -10,42 +14,46 @@ export class Face1 extends Face {
 
     faceRotation = 0.0;
 
-    constructor(canvas: p5) {
-        super(canvas);
+    constructor(p5: P5, leftEye: P5.Image, rightEye: P5.Image, mouth: P5.Image) {
+        super();
+
+        this.leftEye = leftEye;
+        this.rightEye = rightEye;
+        this.mouth = mouth;
 
         // left eye
         let leftEyeRand = this.randomPointInArcRange(
             Math.floor(Math.random() * 90) + 180,
-            Math.floor(Math.random() * this.canvas.width / 2 * this.leftEyeRange)
+            Math.floor(Math.random() * p5.width / 2 * this.leftEyeRange)
         );
 
         this.positions[0] = [
-            canvas.width / 2 + leftEyeRand[0] - 50,
-            canvas.height / 2 + leftEyeRand[1] - 50,
+            p5.width / 2 + leftEyeRand[0] - 50,
+            p5.height / 2 + leftEyeRand[1] - 50,
             0, 0
         ];
 
         // right eye
         let rightEyeRand = this.randomPointInArcRange(
             Math.floor(Math.random() * 90 + 90),
-            Math.floor(Math.random() * this.canvas.width / 2 * this.rightEyeRange)
+            Math.floor(Math.random() * p5.width / 2 * this.rightEyeRange)
         );
 
         this.positions[1] = [
-            canvas.width / 2 + rightEyeRand[0] + 50,
-            canvas.height / 2 + rightEyeRand[1] - 50,
+            p5.width / 2 + rightEyeRand[0] + 50,
+            p5.height / 2 + rightEyeRand[1] - 50,
             0, 0
         ];
 
         // mouth
         let mouthRand = this.randomPointInArcRange(
             Math.floor(Math.random() * 180 - 90),
-            Math.floor(Math.random() * this.canvas.width / 2 * this.mouthEyeRange)
+            Math.floor(Math.random() * p5.width / 2 * this.mouthEyeRange)
         );
 
         this.positions[2] = [
-            canvas.width / 2 + mouthRand[0],
-            canvas.height / 2 + mouthRand[1] + 50,
+            p5.width / 2 + mouthRand[0],
+            p5.height / 2 + mouthRand[1] + 50,
             0, 0
         ];
 
@@ -65,121 +73,117 @@ export class Face1 extends Face {
         this.faceRotation = this.faceRotation * Math.PI / 180;
     }
 
-    public drawLeftEye(image: p5.Image, size: Size) : void {
-        this.canvas.push();
-        this.canvas.translate(
+    public drawEyes(p5: P5, size: Size) : void {
+        p5.push();
+        p5.translate(
             this.positions[0][0],
             this.positions[0][1]
         )
-        this.canvas.rotate(this.faceRotation);
-        this.canvas.scale(-1, 1);
-        this.canvas.image(
-            image, 
+        p5.rotate(this.faceRotation);
+        p5.scale(-1, 1);
+        p5.image(
+            this.leftEye, 
             0, 
             0,
             size.width, size.height);
-        this.canvas.pop();
-    }
+        p5.pop();
 
-    public drawRightEye(image: p5.Image, size: Size) : void {
-        this.canvas.push();
-        this.canvas.translate(
+        p5.push();
+        p5.translate(
             this.positions[1][0],
             this.positions[1][1],
         )
-        this.canvas.rotate(this.faceRotation);
-        this.canvas.image(
-            image, 
+        p5.rotate(this.faceRotation);
+        p5.image(
+            this.rightEye, 
             0, 
             0,
             size.width, size.height);
-        this.canvas.pop();
+        p5.pop();
     }
 
-    public drawMouth(image: p5.Image, size: Size) : void {
-        this.canvas.push();
-        this.canvas.translate(
+    public drawMouth(p5: P5, size: Size) : void {
+        p5.push();
+        p5.translate(
             this.positions[2][0],
             this.positions[2][1],
         )
-        this.canvas.rotate(this.faceRotation);
-        this.canvas.image(
-            image, 
+        p5.rotate(this.faceRotation);
+        p5.image(
+            this.mouth, 
             0, 
             0,
             size.width, size.height);
-        this.canvas.pop();
+        p5.pop();
     }
 
-    public drawLeftEyeRange(size: Size) : void {
-        let strokeColor = Face.debugStorkeColors[0];
-        let fillColor = Face.debugFillColors[0];
-        this.canvas.push();
-        this.canvas.stroke(
-            strokeColor[0],
-            strokeColor[1],
-            strokeColor[2]
+    public drawEyesRange(p5: P5, size: Size) : void {
+        let leftEyeStrokeColor = Face.debugStorkeColors[0];
+        let leftEyeFillColor = Face.debugFillColors[0];
+        p5.push();
+        p5.stroke(
+            leftEyeStrokeColor[0],
+            leftEyeStrokeColor[1],
+            leftEyeStrokeColor[2]
         );
-        this.canvas.strokeWeight(5);
-        this.canvas.fill(
-            fillColor[0], 
-            fillColor[1],
-            fillColor[2], 
+        p5.strokeWeight(5);
+        p5.fill(
+            leftEyeFillColor[0], 
+            leftEyeFillColor[1],
+            leftEyeFillColor[2], 
             0.2 * 255
         );
-        this.canvas.arc(
-            this.canvas.width / 2 - 50, 
-            this.canvas.height / 2 - 50, 
-            Math.floor(this.canvas.width * this.leftEyeRange), Math.floor(this.canvas.height * this.leftEyeRange), Math.PI, - Math.PI / 2);
-        this.canvas.pop();
-    }
+        p5.arc(
+            p5.width / 2 - 50, 
+            p5.height / 2 - 50, 
+            Math.floor(p5.width * this.leftEyeRange), Math.floor(p5.height * this.leftEyeRange), Math.PI, - Math.PI / 2);
+            p5.pop();
 
-    public drawRightEyeRange(size: Size) : void {
-        let strokeColor = Face.debugStorkeColors[1];
-        let fillColor = Face.debugFillColors[1];
-        this.canvas.push();
-        this.canvas.push();
-        this.canvas.stroke(
-            strokeColor[0],
-            strokeColor[1],
-            strokeColor[2]
+        let rightEyeStrokeColor = Face.debugStorkeColors[1];
+        let rightEyeFillColor = Face.debugFillColors[1];
+        p5.push();
+        p5.push();
+        p5.stroke(
+            rightEyeStrokeColor[0],
+            rightEyeStrokeColor[1],
+            rightEyeStrokeColor[2]
         );
-        this.canvas.strokeWeight(5);
-        this.canvas.fill(
-            fillColor[0], 
-            fillColor[1],
-            fillColor[2], 
+        p5.strokeWeight(5);
+        p5.fill(
+            rightEyeFillColor[0], 
+            rightEyeFillColor[1],
+            rightEyeFillColor[2], 
             0.2 * 255
         );
-        this.canvas.arc(
-            this.canvas.width / 2 + 50, 
-            this.canvas.height / 2 - 50, 
-            Math.floor(this.canvas.width * this.rightEyeRange), Math.floor(this.canvas.height * this.rightEyeRange), - Math.PI / 2, 0);
-        this.canvas.pop();
+        p5.arc(
+            p5.width / 2 + 50, 
+            p5.height / 2 - 50, 
+            Math.floor(p5.width * this.rightEyeRange), Math.floor(p5.height * this.rightEyeRange), - Math.PI / 2, 0);
+        p5.pop();
     }
 
-    public drawMouthRange(size: Size) : void {
+    public drawMouthRange(p5: P5, size: Size) : void {
         let strokeColor = Face.debugStorkeColors[2];
         let fillColor = Face.debugFillColors[2];
-        this.canvas.push();
-        this.canvas.push();
-        this.canvas.stroke(
+        p5.push();
+        p5.push();
+        p5.stroke(
             strokeColor[0],
             strokeColor[1],
             strokeColor[2]
         );
-        this.canvas.strokeWeight(5);
-        this.canvas.fill(
+        p5.strokeWeight(5);
+        p5.fill(
             fillColor[0], 
             fillColor[1],
             fillColor[2], 
             0.2 * 255
         );
-        this.canvas.arc(
-            this.canvas.width / 2, 
-            this.canvas.height / 2 + 50, 
-            Math.floor(this.canvas.width * this.mouthEyeRange), Math.floor(this.canvas.height * this.mouthEyeRange), 0, Math.PI);
-        this.canvas.pop();
+        p5.arc(
+            p5.width / 2, 
+            p5.height / 2 + 50, 
+            Math.floor(p5.width * this.mouthEyeRange), Math.floor(p5.height * this.mouthEyeRange), 0, Math.PI);
+        p5.pop();
     }
 
     private randomPointInArcRange(angle: number, length: number) : Vector {
