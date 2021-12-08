@@ -31,7 +31,7 @@ const mouths = importAll(require.context('./images/mouth', false, /\.(png)$/));
 const CANVAS_SIZE: Size = { width: 1200, height: 1200 };
 const IMAGE_SIZE: Size = { width: 800, height: 800 };
 
-const RandomFaceSketch = function(sketch: p5) {
+const interFaceSketch = function(sketch: p5) {
     let background: Vector;
 
     let leftEyeImage: p5.Image;
@@ -73,10 +73,10 @@ const RandomFaceSketch = function(sketch: p5) {
         face.drawRightEye(rightEyeImage, IMAGE_SIZE);
         face.drawMouth(mouthImage, IMAGE_SIZE);
 
-        // face.drawLeftEyeRange(IMAGE_SIZE);
-        // face.drawRightEyeRange(IMAGE_SIZE);
-        // face.drawMouthRange(IMAGE_SIZE);
+        face.drawLeftEyeRange(IMAGE_SIZE);
+        face.drawRightEyeRange(IMAGE_SIZE);
+        face.drawMouthRange(IMAGE_SIZE);
     };
 } 
 
-export default RandomFaceSketch;
+export default interFaceSketch;
