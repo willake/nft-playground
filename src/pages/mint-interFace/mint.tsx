@@ -1,26 +1,29 @@
-import * as p5 from "p5";
+import * as P5 from "p5";
 import * as React from "react";
 import style from './mint.module.css';
 import MintButton from '../../components/mint-button/mint-button';
-import RandomFaceSketch from '../../components/p5/random-face/random-face';
+import { interFaceSketch } from '../../components/p5/interFace/interFace';
 import P5Wrapper from '../../components/p5/wrapper';
 
-interface IProps {
-}
-
 interface IState {
-    sketch: (sketch: p5) => void;
+    interFaceSketch: (p5: P5) => void
 }
 
-export default class MintPage extends React.Component<IProps, IState> {
+class InterFaceMintPage extends React.Component<{}, IState> {
+
+    constructor(props: {}) {
+        super(props);
+
+        this.state = {
+            interFaceSketch: interFaceSketch
+        };
+    }
+
     private mint = () => {
-        this.setState({ sketch: RandomFaceSketch });
+        this.setState({ interFaceSketch: interFaceSketch });
     }
     
-    private onP5Changed = (p: p5) => {
-        // tslint:disable:no-console
-        // console.log(p5)
-        console.log("Change")
+    private onP5Changed = (p: P5) => {
     }
     
     public render() {
@@ -28,7 +31,7 @@ export default class MintPage extends React.Component<IProps, IState> {
             <div>
                 <div className={style.main}>
                     <div className={style.mainItem} > 
-                        <P5Wrapper sketch={RandomFaceSketch} onP5Changed={this.onP5Changed}/>
+                        <P5Wrapper sketch={this.state.interFaceSketch} onP5Changed={this.onP5Changed}/>
                     </div>
                     <div className={style.mainItem} >
                         <MintButton handleClick={this.mint}/>
@@ -38,3 +41,5 @@ export default class MintPage extends React.Component<IProps, IState> {
         );
     }
 }
+
+export default InterFaceMintPage;
