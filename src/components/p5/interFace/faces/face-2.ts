@@ -5,6 +5,7 @@ import { Face } from "./face";
 export class Face2 extends Face {
     eye: P5.Image;
     mouth: P5.Image;
+    
     // range from 0 to 1, it will multiply canvas size 
     leftEyeRange = 0.4;
     rightEyeRange = 0.7;
